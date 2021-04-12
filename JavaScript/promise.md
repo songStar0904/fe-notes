@@ -143,7 +143,6 @@ class MyPromise {
   }
   // resolve 静态方法
   static resolve(parameter) {
-    debugger
     // 如果传入 MyPromise 就直接返回
     if (parameter instanceof MyPromise) {
       return parameter
