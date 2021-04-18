@@ -162,3 +162,28 @@ class MyPromise {
   }
 }
 ```
+
+```js
+Promise.all = function (promises) {
+  return new Promise((resolve, reject) => {
+    promises = Array.from(promises)
+    if (promises.length === 0) {
+      resolve([])
+    } else {
+      let result = []
+      let index = 0
+      for (let i = 0; i < promises.length; i++) {
+        Promise.resolve(promise[i]).then(data => {
+          result[i] = data
+          if (++index === promises.length) {
+            resolve(result)
+          }
+        }, err => {
+          reject(err)
+          return
+        })
+      }
+    }
+  })
+}
+```
