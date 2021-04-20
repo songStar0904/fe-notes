@@ -23,6 +23,12 @@ class EventEmitter {
     }
     return result
   }
+  /**
+   * @description: 
+   * @param {String} event 事件名
+   * @param {Function} listener 监听器函数
+   * @return {Object} 可链式调用
+   */
   $on(event, listener) {
     if (!event || ! listener) return 
     if (!this.isValidListener(listener)) {
@@ -38,6 +44,12 @@ class EventEmitter {
     }
     return this
   }
+  /**
+   * @description: 只监听一次
+   * @param {String} event 事件名
+   * @param {Function} listener 监听器函数
+   * @return {Object} 可链式调用
+   */
   $once(event, listener) {
     this.$on(event, {
       listener,
@@ -45,7 +57,13 @@ class EventEmitter {
     })
     return this
   }
-  $emit(event, args = []) {
+  /**
+   * @description: 
+   * @param {String} event 事件名
+   * @param {Array} args 函数参数
+   * @return {Object} 可链式调用
+   */
+  $emit(event, ...args = []) {
     let listeners = this._events[event]
     if (!listeners) return
     for (let i = 0, len = listeners.length; i < len; i++) {
@@ -59,6 +77,12 @@ class EventEmitter {
     }
     return this
   }
+  /**
+   * @description: 注销监听函数
+   * @param {String} event 事件名
+   * @param {Function} listener 监听器函数
+   * @return {Object} 可链式调用
+   */
   $off(event, listener) {
     let listeners = this._events[event]
     if (!listeners) return
@@ -69,6 +93,12 @@ class EventEmitter {
     }
     return this
   }
+  /**
+   * @description: 注销所有监听函数
+   * @param {String} event 事件名
+   * @param {Function} listener 监听器函数
+   * @return {Object} 可链式调用
+   */
   $allOff(event) {
     if (event && this._events[event]) {
       this._events[event] = []
