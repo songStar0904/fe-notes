@@ -5,7 +5,7 @@ function type(val) {
 
 type(new Set()) // Set
 
-// 2. 手写Number.isNaN ps: window.isNaN对字符串等都为false
+// 2. 手写Number.isNaN ps: window.isNaN对字符串等都为true
 Number.myIsNaN = (val) => {
   return typeof val === 'number' && isNaN(val)
 }
@@ -15,6 +15,9 @@ Number.isNaN('a') // false
 
 // 3. 手写instanceof
 function myInstanceof(left, right) {
+  if (typeof left !== 'object' || left === null) {
+    return
+  }
   let proto = left.__proto__
   let prototype = right.prototype
   while (true) {
