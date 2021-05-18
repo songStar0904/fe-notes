@@ -38,3 +38,12 @@ function bar(a) {
 }
 bar(a)
 console.log(a) // 1
+
+Object._create = function(obj) {
+  // function F() {}
+  // F.prototype = obj
+  // return new F()
+  let o = {}
+  o.__proto__ = obj
+  return o
+}
