@@ -148,18 +148,128 @@ class MyPromise {
       reject(reason)
     })
   }
+  static all(promises) {
+    return new MyPromise((resovle, reject) => {
+      promises = Array.isArray(promises) ? promises : []
+      let len = promises.length
+      let res = []
+      if (len === 0) resolve(res)
+      for (let i = 0; i < len; i++) {
+        promises[i].then(
+          (value) => {
+            res.push(value)
+            len--
+            if (len === 0) {
+              resovle(res)
+            }
+          },
+          (reason) => {
+            reject(reason)
+          }
+        )
+      }
+    })
+  }
+  static race(promises) {
+    return new MyPromise((resolve, reject) => {
+      promises = Array.isArray(promises) ? promises : []
+      let len = promises.length
+      for (let i = 0; i < len; i++) {
+        promises[i].then(
+          (value) => {
+            resolve(value)
+          },
+          (reason) => {
+            reject(reason)
+          }
+        )
+      }
+    })
+  }
+  static allSettled(promises) {
+    return new MyPromise((resolve, reject) => {
+      promises = Array.isArray(promises) ? promises : []
+      let len = promises.length
+      let res = []
+      function compute() {
+        if (--len === 0) {
+          resolve(res)
+        }
+      }
+      function resolvePromise(index, promise) {
+        if (promise instanceof MyPromise) {
+          promise.then(
+            (value) => {
+              res[index] = { status: 'fufilled', value }
+              compute()
+            },
+            (reason) => {
+              res[index] = { status: 'rejected', reason }
+              compute()
+            }
+          )
+        } else {
+          res[index] = { status: 'fufilled', value: promise }
+          compute()
+        }
+      }
+      for (let i = 0; i < len; i++) {
+        resolvePromise(i, promises[i])
+      }
+    })
+  }
+  static any(promises) {
+    return new MyPromise((resolve, reject) => {
+      promises = Array.isArray(promises) ? promises : []
+      let len = promises.length
+      let errs = []
+      if (len === 0)
+        return reject(new AggregateError('All promises were rejected'))
+      for (let i = 0; i < len; i++) {
+        promises[i].then(
+          (value) => {
+            resolve(value)
+          },
+          (reason) => {
+            len--
+            errs.push(reason)
+            if (len === 0) reject(new AggregateError(errs))
+          }
+        )
+      }
+    })
+  }
 }
 
-class P {
-  constructor(fn) {
-    fn(this.a)
-  }
-  a(x) {
-    console.log(this, x)
-  }
-}
+let p1 = new MyPromise((resolve, reject) => {
+  setTimeout(() => {
+    // reject(4)
+    resolve(1)
+  }, 500)
+})
+let p2 = new MyPromise((resolve, reject) => {
+  setTimeout(() => {
+    // reject(3)
+    resolve(2)
+  }, 1000)
+})
 
-let p = new P((b) => {
-  console.log(this)
-  b(1)
+MyPromise.all([p1, p2])
+  .then((res) => {
+    console.log(res)
+  })
+  .catch((err) => {
+    console.log(err)
+  })
+
+MyPromise.any([p1, p2])
+  .then((res) => {
+    console.log(res)
+  })
+  .catch((err) => {
+    console.log(err.errors)
+  })
+
+MyPromise.allSettled([p1, p2]).then((res) => {
+  console.log(res)
 })
