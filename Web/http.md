@@ -83,7 +83,7 @@ http/1 长连接 设置 Connection: keep-alive;http/1.1 默认开启。
 
 在 HTTP 请求建立 TCP 连接时，请求结束，TCP 连接不断开，继续保持一段时间（timeout），在这段时间内，同一客户端向服务器发送请求都会复用该 TCP 连接，并重置 timeout 时间计数器，在接下来 timeout 时间内还可以继续复用 TCP 。这样无疑省略了反复创建和销毁 TCP 连接的损耗。
 
-![长连接vs短连接](/assets/keep-alive.png)
+![长连接vs短连接](./assets/keep-alive.png)
 
 HTTP/2 多路复用
 
