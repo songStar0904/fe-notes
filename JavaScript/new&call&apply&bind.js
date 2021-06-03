@@ -3,7 +3,7 @@
  * 2. 把对象隐式原型赋值给构造函数prototype
  * 3. 执行构造函数
  * 4. 返回一个对象（如果构造函数返回对象则返回构造函数的对象，否则返回返回new创建的对象）
-*/
+ */
 
 function myNew(fn, ...args) {
   if (typeof fn !== 'function') {
@@ -19,15 +19,33 @@ function myNew(fn, ...args) {
   }
 }
 
+/**
+ * Object.create()
+ * @param {Object} obj
+ * @returns
+ */
+
+function myCreate(obj) {
+  function F() {}
+  F.prototype = obj
+  return new F()
+}
+function myCreate(obj) {
+  let o = {}
+  o.__proto__ = obj // __proto__没有形成规范标准（有的浏览器不支持） 所以一般用上面方法
+  return o
+}
+myCreate({ a: 1 })
+
 /** call
  * fn.call(context, arg1, arg2, ...)
-*/
+ */
 
-Function.prototype.myCall = function(context = window, ...args) {
-  let fn = this
-  context.fn = fn
-  let res = context.fn(...args)
-  delete context.fn
+Function.prototype.myCall = function (context = window, ...args) {
+  let fn = Symbol() // 保证唯一 不然可能会被替换掉原有的函数
+  context[fn] = this
+  let res = context[fn](...args)
+  delete context[fn]
   return res
 }
 
@@ -57,8 +75,11 @@ Function.prototype.myBind = function(context, ...args) {
   if (typeof fn !== 'function') {
     throw new Error('fn must be a function')
   }
-  let fBound = function() {
-    return fn.apply(this instanceof fn ? this : context, [...args, ...arguments])
+  let fBound = function () {
+    return fn.apply(this instanceof fn ? this : context, [
+      ...args,
+      ...arguments,
+    ])
   }
   if (fn.prototype) {
     fBound.prototype = Object.create(fn.prototype)
@@ -67,12 +88,18 @@ Function.prototype.myBind = function(context, ...args) {
 }
 
 var obj = {
-  name: 'obj'
+  name: 'obj',
 }
-var fn = function(arg1, arg2) {
+var fn = function (arg1, arg2) {
   this.fn = 'fn'
   console.log(this.name, this.fn, arg1, arg2)
 }
 var objFn = fn.myBind(obj, 'arg1')
 var newObj = new objFn('arg2')
 console.log(newObj)
+
+var foo = {}
+F = function () {}
+Object.prototype.a = 'a'
+Function.prototype.b = 'b'
+console.log(foo.a, foo.b, F.a, F.b)
