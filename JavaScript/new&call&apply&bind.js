@@ -52,11 +52,12 @@ Function.prototype.myCall = function (context = window, ...args) {
 /**apply
  * fn.apply(context, [arg1, arg2, ...])
  */
-Function.prototype.myApply = function (context = window, args) {
-  let fn = Symbol()
-  context[fn] = this
-  let res = context[fn](...args)
-  delete context[fn]
+Function.prototype.myApply = function(context = window, args) {
+  let fn = this
+  let name = Symbol()
+  context[name] = fn
+  let res = context[name](...args)
+  delete context[name]
   return res
 }
 
@@ -67,9 +68,9 @@ Function.prototype.myApply = function (context = window, args) {
  * 1. 改变了fn的this指向，让this指向了context，返回一个函数
  * 2. 可以在bind的时候开始给fn传递参数
  * 3. 调用bindFn在传递剩下的参数
- * 4. bind()函数回创建一个新绑定的函数（bound function）绑定函数也可以使用new运算符构造，提供的this值会被武略，但迁至参数仍会提供给模拟函数
+ * 4. bind()函数回创建一个新绑定的函数（bound function）绑定函数也可以使用new运算符构造，提供的this值会被忽略，但迁至参数仍会提供给模拟函数
  */
-Function.prototype.myBind = function (context, ...args) {
+Function.prototype.myBind = function(context, ...args) {
   let fn = this
   if (typeof fn !== 'function') {
     throw new Error('fn must be a function')
