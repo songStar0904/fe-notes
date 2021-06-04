@@ -59,14 +59,18 @@ Array.prototype.mySome = function (cb, context = window) {
 }
 
 // reduce
-Array.prototype.myReduce = function (cb, initValue = []) {
-  if (typeof cb === 'function') {
+Array.prototype.myReduce = function (cb, initValue) {
+  if (typeof cb !== 'function') {
     return Error('callback is must be function')
   }
   let arr = this
   let res = initValue
   for (let i = 0; i < arr.length; i++) {
-    res = cb.call(context, res, arr[i], i, arr)
+    if (typeof res === 'undefined') {
+      res = arr[0]
+    } else {
+      res = cb(res, arr[i], i, arr)
+    }
   }
   return res
 }

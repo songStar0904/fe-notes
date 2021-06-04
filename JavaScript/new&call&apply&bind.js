@@ -94,11 +94,12 @@ var fn = function (arg1, arg2) {
   console.log(this.name, this.fn, arg1, arg2)
 }
 var objFn = fn.myBind(obj, 'arg1')
-var newObj = new objFn('arg2')
+objFn('arg2') // obj fn arg1 arg2
+var newObj = new objFn('arg2') // undefined fn arg1 arg2
 console.log(newObj)
 
 var foo = {}
 F = function () {}
 Object.prototype.a = 'a'
 Function.prototype.b = 'b'
-console.log(foo.a, foo.b, F.a, F.b)
+console.log(foo.a, foo.b, F.a, F.b) // a undefined a b

@@ -36,7 +36,7 @@ function bar(a) {
   console.log(a) // 2
   var a = 3
   console.log(a) // 3
-  function a() {} // 优先级没有var高
+  function a() {} // 优先级没有var高 因为function 先执行 随后被var 替换
   console.log(a) // 3
 }
 bar(a)
