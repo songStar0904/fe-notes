@@ -6,6 +6,9 @@ function type(val) {
 type(new Set()) // Set
 
 // 2. 手写Number.isNaN ps: window.isNaN对字符串等都为true
+// 当我们向isNaN传递一个参数，它的本意是通过Number()方法尝试将这参数转换成Number类型，如果成功返回false，如果失败返回true。
+// 判断传入的参数是否严格的等于NaN(也就是 ===)。
+// Number.isNaN与isNaN最的区别是，Number.isNaN不存在类型转换的行为。
 Number.myIsNaN = (val) => {
   return typeof val === 'number' && isNaN(val)
 }
