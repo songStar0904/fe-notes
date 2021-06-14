@@ -4,9 +4,12 @@
  * 3. XMLHttpRequest向服务器发送请求
  * 4. 服务器处理请求后，会把相应返回到网页，此时，XMLHttpRequest监听到这个相应，并执行响应代码。
  */
-function myAjax(url, options = {
-  method: 'GET'
-}) {
+function myAjax(
+  url,
+  options = {
+    method: 'GET',
+  }
+) {
   return new Promise((resolve, reject) => {
     var xhttp
     if (window.XMLHttpRequest) {
@@ -17,7 +20,7 @@ function myAjax(url, options = {
     }
     xhttp.open(options.method, url)
     xhttp.send(options?.data)
-    xhttp.onreadystatechange = function() {
+    xhttp.onreadystatechange = function () {
       if (xhttp.readyState === 4) {
         // 0：UNSENT：代理被创建，但尚未调用open()方法
         // 1：OPENED：open() 方法已经被调用
