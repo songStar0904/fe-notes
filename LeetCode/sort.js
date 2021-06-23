@@ -57,6 +57,33 @@ const bubbleSort = (nums) => {
 }
 
 /**
+ * 合并排序
+ */
+
+const mergeSort = (nums) => {
+  const merge = (l, r) => {
+    let res = [], n1 = l.length, n2 = r.length, i = 0, j = 0
+    while(i < n1 && j < n2) {
+      if (l[i] <= r[j]) {
+        res.push(l[i])
+        i++
+      } else {
+        res.push(r[j])
+        j++
+      }
+    }
+    return res.concat(l.slice(i)).concat(r.slice(j))
+  }
+  let n = nums.length
+  if (n < 2) return nums
+  let mid = Math.floor(n / 2)
+  let left = nums.slice(0, mid), right = nums.slice(mid)
+  return merge(mergeSort(left), mergeSort(right))
+}
+
+mergeSort([5, 2, 4, 7, 9, 8, 3, 6, 3, 8, 3])
+
+/**
  * --- 测试用例 ---
  *
  * 输入：[6, 45, 3, 2, 5, 6, 8, 4, 3, 4, 56, 67, 5]
@@ -67,6 +94,25 @@ const bubbleSort = (nums) => {
  * 思考：选择排序是稳定的吗？
  * 解答：要看代码是如何实现的，在本例中由于有交换，所以是不稳定排序。
  */
+
+const selectSort = (nums) => {
+  let n = nums.length
+  let min = Infinity, tem, flag
+  for (let i = 0; i < n; i++) {
+    for (let j = i; j < n; j++) {
+      if (min > nums[j]) {
+        min = nums[j]
+        flag = j
+      }
+    }
+    tem = nums[i]
+    nums[i] = min
+    nums[flag] = tem
+    min = Infinity
+  }
+  return nums
+}
+selectSort([6, 45, 3, 2, 5, 6, 8, 4, 3, 4, 56, 67, 5])
 
 /**
  * --- 题目描述 ---
