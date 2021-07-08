@@ -20,6 +20,7 @@ module.exports = {
   getDependencies: (ast) => {
     const dependencies = []
     traverse(ast, {
+      // 根据import查找相关依赖
       ImportDeclaration: ({ node }) => {
         dependencies.push(node.source.value)
       },
